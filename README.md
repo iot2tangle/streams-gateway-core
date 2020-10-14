@@ -3,13 +3,13 @@
 ## Introdution
 This is the Core Repository for the iot2tangle Gateways. It provides the base API to open Channels and publish signed data to the Tangle.  
   
-To learn more about IOTA-Streams clicke [here]("https://docs.iota.org/docs/iota-streams/1.1/overview")  
+To learn more about IOTA-Streams clicke [here](https://docs.iota.org/docs/iota-streams/1.1/overview)  
   
-To look at example implementations we have two Gateways, for HTTP and MQTT, already deployed with the Streams-Gateway-Core.
+To look at example implementations we have two Gateways, for [HTTP](https://github.com/iot2tangle/Streams-wifi-gateway) and [MQTT](https://github.com/iot2tangle/streams-mqtt-gateway), already deployed with the Streams-Gateway-Core.
   
 ## Usage
 To interact with Library import it as a dependency by adding it to the `Cargo.toml` file:  
-`gateway_core = { git = "https://github.com/iot2tangle/streams-gateway-core", branch="main"}`
+`gateway_core = { git = "https://github.com/iot2tangle/streams-gateway-core", branch="master"}`
   
 You can then import the library into your project with:  
 `extern crate gateway_core;`  
