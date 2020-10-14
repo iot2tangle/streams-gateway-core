@@ -1,5 +1,5 @@
 [package]
-name = "streams_gateway_core"
+name = "gateway_core"
 version = "0.1.0"
 authors = ["AleBuser <alebuser.98@gmail.com>"]
 edition = "2018"

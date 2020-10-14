@@ -2,9 +2,10 @@
 //! Channel author
 //!
 use crate::{
-    payload::payload_serializer::{empty_bytes, PacketPayload},
+    payload::payload_serializer::{empty_bytes, json::PayloadBuilder, PacketPayload},
     random_seed,
 };
+
 use anyhow::Result;
 use iota::client as iota_client;
 use iota_streams::app::transport::tangle::{client::SendTrytesOptions, PAYLOAD_BYTES};
@@ -50,23 +51,24 @@ impl Channel {
     ///
     /// Open a channel
     ///
-    pub fn open(&mut self) -> Result<(String, String)> {
+    pub fn open(&mut self) -> Result<String> {
         let announcement_message = self.author.announce()?;
         iota_client::Client::get()
             .send_message_with_options(&announcement_message, self.send_opt)?;
 
         self.announcement_id = announcement_message.link.msgid.to_string();
 
-        Ok((self.channel_address.clone(), self.announcement_id.clone()))
+        Ok(self.channel_address.clone())
     }
 
     ///
     /// Write signed packet
     ///
-    pub fn write_signed<T>(&mut self, payload: T) -> Result<String>
+    pub fn write_signed<T>(&mut self, data: T) -> Result<String>
     where
-        T: PacketPayload,
+        T: serde::Serialize,
     {
+        let payload = PayloadBuilder::new().public(&data).unwrap().build();
         let signed_packet_link = {
             if self.previous_msg_tag == String::default() {
                 let keyload_link =
