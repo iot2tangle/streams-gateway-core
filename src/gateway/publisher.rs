@@ -7,9 +7,8 @@ use crate::{
 };
 
 use anyhow::Result;
-use iota::client as iota_client;
+use iota_streams::app::transport::tangle::client::Client;
 use iota_streams::app::transport::tangle::{client::SendTrytesOptions, PAYLOAD_BYTES};
-use iota_streams::app::transport::Transport;
 use iota_streams::app_channels::api::tangle::{Address, Author};
 use std::string::ToString;
 
@@ -17,8 +16,7 @@ use std::string::ToString;
 /// Channel
 ///
 pub struct Channel {
-    author: Author,
-    send_opt: SendTrytesOptions,
+    author: Author<Client>,
     channel_address: String,
     announcement_id: String,
     previous_msg_tag: String,
@@ -34,14 +32,21 @@ impl Channel {
             None => random_seed(),
         };
 
-        let author = Author::new(&seed, "utf-8", PAYLOAD_BYTES, false);
-        iota_client::Client::add_node(&node).unwrap();
+        let client: Client = Client::new(
+            send_opt,
+            iota::client::ClientBuilder::new()
+                .node(&node)
+                .unwrap()
+                .build()
+                .unwrap(),
+        );
+
+        let author = Author::new(&seed, "utf-8", PAYLOAD_BYTES, false, client);
 
         let channel_address = author.channel_address().unwrap().to_string();
 
         Self {
             author: author,
-            send_opt: send_opt,
             channel_address: channel_address,
             announcement_id: String::default(),
             previous_msg_tag: String::default(),
@@ -52,11 +57,9 @@ impl Channel {
     /// Open a channel
     ///
     pub fn open(&mut self) -> Result<String> {
-        let announcement_message = self.author.announce()?;
-        iota_client::Client::get()
-            .send_message_with_options(&announcement_message, self.send_opt)?;
+        let announcement_message = self.author.send_announce()?;
 
-        self.announcement_id = announcement_message.link.msgid.to_string();
+        self.announcement_id = announcement_message.msgid.to_string();
 
         Ok(self.channel_address.clone())
     }
@@ -73,23 +76,21 @@ impl Channel {
             if self.previous_msg_tag == String::default() {
                 let keyload_link =
                     Address::from_str(&self.channel_address, &self.announcement_id).unwrap();
-                let msg = self.author.sign_packet(
+                let msg = self.author.send_signed_packet(
                     &keyload_link,
                     &payload.public_data(),
                     &empty_bytes(),
                 )?;
                 let ret_link = msg.0;
-                iota_client::Client::get().send_message_with_options(&ret_link, self.send_opt)?;
-                ret_link.link.clone()
+                ret_link.clone()
             } else {
-                let msg = self.author.sign_packet(
+                let msg = self.author.send_signed_packet(
                     &Address::from_str(&self.channel_address, &self.previous_msg_tag).unwrap(),
                     &payload.public_data(),
                     &empty_bytes(),
                 )?;
                 let ret_link = msg.0;
-                iota_client::Client::get().send_message_with_options(&ret_link, self.send_opt)?;
-                ret_link.link.clone()
+                ret_link.clone()
             }
         };
 
