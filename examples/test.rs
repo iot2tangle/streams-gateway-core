@@ -16,8 +16,8 @@ fn main() {
 
     let mut channel = Channel::new("https://nodes.iota.cafe:443".to_string(), send_opt, None);
 
-    let address = channel.open().unwrap();
-    println!("Channel Address: {}", address);
+    let (address, msg_id) = channel.open().unwrap();
+    println!("Channel Address: {}", format!("{}:{}", address, msg_id));
 
     let data = Data {
         hello: String::from("Hello"),

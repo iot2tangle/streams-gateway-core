@@ -56,12 +56,13 @@ impl Channel {
     ///
     /// Open a channel
     ///
-    pub fn open(&mut self) -> Result<String> {
+    pub fn open(&mut self) -> Result<(String, String)> {
         let announcement_message = self.author.send_announce()?;
 
         self.announcement_id = announcement_message.msgid.to_string();
+        println!("{:?}", self.announcement_id);
 
-        Ok(self.channel_address.clone())
+        Ok((self.channel_address.clone(), self.announcement_id.clone()))
     }
 
     ///
