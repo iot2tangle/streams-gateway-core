@@ -26,11 +26,14 @@ impl Channel {
     ///
     /// Initialize the Channel
     ///
-    pub fn new(node: String, send_opt: SendTrytesOptions, seed_option: Option<String>) -> Channel {
+    pub fn new(node: String, mwm: u8, local_pow: bool, seed_option: Option<String>) -> Channel {
         let seed = match seed_option {
             Some(seed) => seed,
             None => random_seed(),
         };
+        let mut send_opt = SendTrytesOptions::default();
+        send_opt.min_weight_magnitude = mwm;
+        send_opt.local_pow = local_pow;
 
         let client: Client = Client::new(
             send_opt,
