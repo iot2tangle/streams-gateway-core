@@ -502,7 +502,6 @@ dependencies = [
  "base64",
  "chrono",
  "failure",
- "iota-conversion",
  "iota-core",
  "iota-streams",
  "rand",
@@ -727,21 +726,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "87bd27fb99929629a01f3b596c93aec5b6609854c882c45f9b5ded9cc0e24f61"
 
 [[package]]
-name = "iota-constants"
-version = "0.2.1"
-source = "git+https://github.com/iotaledger/iota.rs?rev=03cf531#03cf531e0cdc09c474b5f4cf9474b958ef5f5789"
-
-[[package]]
-name = "iota-conversion"
-version = "0.5.1"
-source = "git+https://github.com/iotaledger/iota.rs?rev=03cf531#03cf531e0cdc09c474b5f4cf9474b958ef5f5789"
-dependencies = [
- "failure",
- "iota-constants 0.2.1 (git+https://github.com/iotaledger/iota.rs?rev=03cf531)",
- "lazy_static",
-]
-
-[[package]]
 name = "iota-core"
 version = "0.2.0-alpha.3"
 source = "git+https://github.com/iotaledger/iota.rs?rev=74fa529#74fa529402dcfe1106e7954db057a5c5964aa43d"
@@ -776,7 +760,7 @@ dependencies = [
  "bee-transaction",
  "chrono",
  "hex",
- "iota-constants 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "iota-constants",
  "iota-core",
  "iota-streams-core",
  "iota-streams-core-edsig",
