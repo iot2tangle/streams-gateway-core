@@ -2,7 +2,6 @@
 //! Payload Module
 //!
 use base64::{decode_config, encode_config, URL_SAFE_NO_PAD};
-use iota_conversion::trytes_converter::{to_string as trytes_to_string, to_trytes};
 use iota_streams::ddml::types::Bytes;
 use serde::{de::DeserializeOwned, Serialize};
 use std::marker::PhantomData;
@@ -57,7 +56,7 @@ where
         if data_str.len() == 0 {
             return Ok(None);
         }
-        let raw = trytes_to_string(&data.to_string())?;
+        let raw = &data.to_string();
         let decode_data = decode_config(&raw, URL_SAFE_NO_PAD)?;
         Ok(Some(String::from_utf8(decode_data).unwrap()))
     }
@@ -105,7 +104,7 @@ where
     {
         // let json_payload = serde_json::to_string(data).unwrap();
         let payload_str = S::serialize_data(data)?;
-        self.p_data = to_trytes(&encode_config(&payload_str, URL_SAFE_NO_PAD))?;
+        self.p_data = encode_config(&payload_str, URL_SAFE_NO_PAD);
         Ok(self)
     }
 
@@ -118,7 +117,7 @@ where
     {
         // let json_payload = serde_json::to_string(data).unwrap();
         let payload_str = S::serialize_data(data)?;
-        self.m_data = to_trytes(&encode_config(&payload_str, URL_SAFE_NO_PAD))?;
+        self.m_data = encode_config(&payload_str, URL_SAFE_NO_PAD);
         Ok(self)
     }
 

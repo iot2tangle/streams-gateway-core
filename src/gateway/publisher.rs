@@ -7,16 +7,22 @@ use crate::{
 };
 
 use anyhow::Result;
-use iota_streams::app::transport::tangle::client::Client;
-use iota_streams::app::transport::tangle::{client::SendTrytesOptions, PAYLOAD_BYTES};
-use iota_streams::app_channels::api::tangle::{Address, Author};
+use iota_streams::{
+    app::transport::tangle::{
+        client::{Client as StreamsClient, SendTrytesOptions},
+        PAYLOAD_BYTES,
+    },
+    app_channels::api::tangle::{Address, Author},
+};
+
+use iota::client as iota_client;
 use std::string::ToString;
 
 ///
 /// Channel
 ///
 pub struct Channel {
-    author: Author<Client>,
+    author: Author<StreamsClient>,
     channel_address: String,
     announcement_id: String,
     previous_msg_tag: String,
@@ -26,15 +32,18 @@ impl Channel {
     ///
     /// Initialize the Channel
     ///
-    pub fn new(node: String, send_opt: SendTrytesOptions, seed_option: Option<String>) -> Channel {
+    pub fn new(node: String, mwm: u8, local_pow: bool, seed_option: Option<String>) -> Channel {
         let seed = match seed_option {
             Some(seed) => seed,
             None => random_seed(),
         };
+        let mut send_opt = SendTrytesOptions::default();
+        send_opt.min_weight_magnitude = mwm;
+        send_opt.local_pow = local_pow;
 
-        let client: Client = Client::new(
+        let client: StreamsClient = StreamsClient::new(
             send_opt,
-            iota::client::ClientBuilder::new()
+            iota_client::ClientBuilder::new()
                 .node(&node)
                 .unwrap()
                 .build()
