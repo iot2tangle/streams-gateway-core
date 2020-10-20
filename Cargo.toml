@@ -14,7 +14,7 @@ path = "src/lib.rs"
 
 [dependencies]
 anyhow = { version = "1.0", default-features = false }
-iota-streams = { git = "https://github.com/iotaledger/streams", rev = "04cfe80"}
+iota-streams = { git = "https://github.com/iotaledger/streams", rev = "eae3a70"}
 iota-core = { git = "https://github.com/iotaledger/iota.rs", rev = "74fa529" }
 tokio = { version = "^0.2", features = ["full"] }
 async-trait = "0.1.30"
