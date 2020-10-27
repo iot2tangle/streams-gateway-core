@@ -8,14 +8,16 @@ use crate::{
 
 use anyhow::Result;
 use iota_streams::{
-    app::transport::tangle::{
-        client::{Client as StreamsClient, SendTrytesOptions},
-        PAYLOAD_BYTES,
+    app::transport::{
+        TransportOptions,
+        tangle::{
+            client::{Client as StreamsClient, SendTrytesOptions},
+            PAYLOAD_BYTES,
+        },
     },
     app_channels::api::tangle::{Address, Author},
 };
 
-use iota::client as iota_client;
 use std::string::ToString;
 
 ///
@@ -41,14 +43,8 @@ impl Channel {
         send_opt.min_weight_magnitude = mwm;
         send_opt.local_pow = local_pow;
 
-        let client: StreamsClient = StreamsClient::new(
-            send_opt,
-            iota_client::ClientBuilder::new()
-                .node(&node)
-                .unwrap()
-                .build()
-                .unwrap(),
-        );
+        let mut client = StreamsClient::new_from_url(&node);
+        client.set_send_options(send_opt);
 
         let author = Author::new(&seed, "utf-8", PAYLOAD_BYTES, false, client);
 
