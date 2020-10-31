@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["AleBuser <alebuser.98@gmail.com>"]
 edition = "2018"
 license = "Apache-2.0/MIT"
+repository = "https://github.com/iot2tangle/streams-gateway-core"
 readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
