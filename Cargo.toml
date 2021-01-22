@@ -14,7 +14,7 @@ name = "gateway_core"
 path = "src/lib.rs"
 
 [dependencies]
-anyhow = { version = "1.0", default-features = false }
+anyhow = { version = "1.0.34", default-features = false }
 iota-streams = { git = "https://github.com/iotaledger/streams", branch = "develop" }
 tokio = { version = "^0.2", features = ["full"] }
 async-trait = "0.1.30"
