@@ -20,7 +20,12 @@ pub struct SensorType {
 /// Opens a Stream channel and sends some data to it
 ///
 fn main() {
-    let mut channel = Channel::new("https://nodes.iota.cafe:443".to_string(), 14, false, None);
+    let mut channel = Channel::new(
+        "https://nodes.thetangle.org:443".to_string(),
+        14,
+        false,
+        None,
+    );
 
     let (address, msg_id) = channel.open().unwrap();
     println!("Channel Address: {}", format!("{}:{}", address, msg_id));
