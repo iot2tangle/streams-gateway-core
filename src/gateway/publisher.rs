@@ -45,7 +45,7 @@ impl Channel {
     ///
     /// Initialize the Channel
     ///
-    pub fn new(node: String, _mwm: u8, local_pow: bool, _seed_option: Option<String>) -> Channel {
+    pub fn new(node: String, local_pow: bool, _seed_option: Option<String>) -> Channel {
 
         // Seed generator
         let alph9 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ9";
