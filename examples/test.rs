@@ -21,7 +21,7 @@ pub struct SensorType {
 ///
 fn main() {
     let mut channel = Channel::new(
-        "https://nodes.thetangle.org:443".to_string(),
+        "https://chrysalis-nodes.iota.org:443".to_string(),
         14,
         false,
         None,

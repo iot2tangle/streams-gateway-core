@@ -20,7 +20,6 @@ use iota_streams::{
         TransportOptions,
     },
     core::{
-        println,
         Result,
     },
     app_channels::api::tangle::{
