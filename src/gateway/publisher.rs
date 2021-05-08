@@ -1,30 +1,42 @@
 //!
 //! Channel author
 //!
+
 use crate::{
     payload::payload_serializer::{empty_bytes, json::PayloadBuilder, PacketPayload},
-    random_seed,
 };
 
-use anyhow::Result;
+use rand::Rng;
+
 use iota_streams::{
     app::transport::{
-        TransportOptions,
         tangle::{
-            client::{Client as StreamsClient, SendTrytesOptions},
+            client::{
+                Client,
+                SendOptions,
+            },
             PAYLOAD_BYTES,
         },
+        TransportOptions,
     },
-    app_channels::api::tangle::{Address, Author},
+    core::{
+        println,
+        Result,
+    },
+    app_channels::api::tangle::{
+                            Address,
+                            Author
+                        },
 };
 
 use std::string::ToString;
+
 
 ///
 /// Channel
 ///
 pub struct Channel {
-    author: Author<StreamsClient>,
+    author: Author<Client>,
     channel_address: String,
     announcement_id: String,
     previous_msg_tag: String,
@@ -34,20 +46,24 @@ impl Channel {
     ///
     /// Initialize the Channel
     ///
-    pub fn new(node: String, mwm: u8, local_pow: bool, seed_option: Option<String>) -> Channel {
-        let seed = match seed_option {
-            Some(seed) => seed,
-            None => random_seed(),
-        };
-        let mut send_opt = SendTrytesOptions::default();
-        send_opt.min_weight_magnitude = mwm;
+    pub fn new(node: String, _mwm: u8, local_pow: bool, _seed_option: Option<String>) -> Channel {
+
+        // Seed generator
+        let alph9 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ9";
+        let seed: &str = &(0..10)
+            .map(|_| alph9.chars().nth(rand::thread_rng().gen_range(0, 27)).unwrap())
+            .collect::<String>();
+
+        // Client Configuration
+        let mut send_opt = SendOptions::default();
+
         send_opt.local_pow = local_pow;
 
-        let mut client = StreamsClient::new_from_url(&node);
+        let mut client = Client::new_from_url(&node);
         client.set_send_options(send_opt);
 
+        // Create Author
         let author = Author::new(&seed, "utf-8", PAYLOAD_BYTES, false, client);
-
         let channel_address = author.channel_address().unwrap().to_string();
 
         Self {
