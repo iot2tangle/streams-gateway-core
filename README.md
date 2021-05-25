@@ -3,7 +3,7 @@
 ## Introdution
 This is the Core Repository for the iot2tangle Gateways. It provides the base API to open Channels and publish signed data to the Tangle.  
   
-To learn more about IOTA-Streams clicke [here](https://docs.iota.org/docs/iota-streams/1.1/overview)  
+To learn more about IOTA-Streams clicke [here](https://www.iota.org/solutions/streams)  
   
 To look at example implementations we have two Gateways, for [HTTP](https://github.com/iot2tangle/Streams-wifi-gateway) and [MQTT](https://github.com/iot2tangle/streams-mqtt-gateway), already deployed with the Streams-Gateway-Core.
   
